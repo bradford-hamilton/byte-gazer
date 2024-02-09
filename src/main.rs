@@ -19,22 +19,19 @@ fn read_to_binary(path: &str) -> io::Result<Vec<u8>> {
     Ok(buffer)
 }
 
-fn to_hex_string(bytes: &[u8]) -> String {
-    bytes
-        .iter()
-        .map(|byte| format!("{:02x}", byte))
-        .collect::<Vec<String>>()
-        .join(" ")
-}
-
 fn print_hex_view(bytes: &[u8]) {
-    for chunk in bytes.chunks(16) {
-        let hex_part = to_hex_string(chunk);
+    let bytes_per_line = 16;
+
+    for chunk in bytes.chunks(bytes_per_line) {
+        let hex_part = chunk
+            .iter()
+            .map(|byte| format!("{:02x} ", byte))
+            .collect::<String>();
+
         let ascii_part = chunk
             .iter()
             .map(|&b| {
-                if b.is_ascii_alphanumeric() || b.is_ascii_punctuation() || b.is_ascii_whitespace()
-                {
+                if b.is_ascii_graphic() || b == b' ' {
                     b as char
                 } else {
                     '.'
@@ -42,6 +39,9 @@ fn print_hex_view(bytes: &[u8]) {
             })
             .collect::<String>();
 
-        println!("{}  {}", hex_part, ascii_part);
+        // Calculate padding, ensuring no overflow
+        let padding = "   ".repeat(bytes_per_line - chunk.len());
+
+        println!("{}{} | {}", hex_part, padding, ascii_part);
     }
 }
