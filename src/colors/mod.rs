@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 pub enum Foreground {
     Black = 30,
     Red,
@@ -11,6 +12,7 @@ pub enum Foreground {
     BrightWhite,
 }
 
+#[allow(dead_code)]
 pub enum Background {
     Black = 40,
     Red,

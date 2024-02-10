@@ -4,6 +4,7 @@ mod bg;
 mod colors;
 
 fn main() {
+    // let path = "test-hex-program";
     let path = "test.hex";
     let byte_gazer = match ByteGazer::new(path) {
         Ok(bg) => bg,

@@ -23,12 +23,20 @@ impl ByteGazer {
         for chunk in self.bytes.chunks(bytes_per_line) {
             let hex_portion = chunk
                 .iter()
-                .map(|byte| {
-                    colors::apply_to_text(
-                        &format!("{:02x} ", byte),
-                        colors::Foreground::Blue,
-                        colors::Background::Black,
-                    )
+                .map(|&byte| {
+                    if byte.is_ascii_graphic() || byte == b' ' {
+                        colors::apply_to_text(
+                            &format!("{:02x} ", byte),
+                            colors::Foreground::Green,
+                            colors::Background::Black,
+                        )
+                    } else {
+                        colors::apply_to_text(
+                            &format!("{:02x} ", byte),
+                            colors::Foreground::Red,
+                            colors::Background::Black,
+                        )
+                    }
                 })
                 .collect::<String>();
 
