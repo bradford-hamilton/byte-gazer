@@ -21,47 +21,52 @@ impl ByteGazer {
         let bytes_per_line = 16;
 
         for chunk in self.bytes.chunks(bytes_per_line) {
-            let hex_portion = chunk
-                .iter()
-                .map(|&byte| {
-                    if byte.is_ascii_graphic() || byte == b' ' {
-                        colors::apply_to_text(
-                            &format!("{:02x} ", byte),
-                            colors::Foreground::Green,
-                            colors::Background::Black,
-                        )
-                    } else {
-                        colors::apply_to_text(
-                            &format!("{:02x} ", byte),
-                            colors::Foreground::Red,
-                            colors::Background::Black,
-                        )
-                    }
-                })
-                .collect::<String>();
-
-            let ascii_portion = chunk
-                .iter()
-                .map(|&byte| {
-                    if byte.is_ascii_graphic() || byte == b' ' {
-                        colors::apply_to_text(
-                            &format!("{}", byte as char),
-                            colors::Foreground::Green,
-                            colors::Background::Black,
-                        )
-                    } else {
-                        colors::apply_to_text(
-                            ".",
-                            colors::Foreground::Red,
-                            colors::Background::Black,
-                        )
-                    }
-                })
-                .collect::<String>();
-
             let padding = "   ".repeat(bytes_per_line - chunk.len());
 
-            println!("{}{} | {}", hex_portion, padding, ascii_portion);
+            println!(
+                "{}{} | {}",
+                self.transform_hex(chunk),
+                padding,
+                self.transform_ascii(chunk)
+            );
         }
+    }
+
+    fn transform_hex(&self, chunk: &[u8]) -> String {
+        chunk
+            .iter()
+            .map(|&byte| {
+                if byte.is_ascii_graphic() || byte == b' ' {
+                    colors::apply_to_text(
+                        &format!("{:02x} ", byte),
+                        colors::Foreground::Green,
+                        colors::Background::Black,
+                    )
+                } else {
+                    colors::apply_to_text(
+                        &format!("{:02x} ", byte),
+                        colors::Foreground::Red,
+                        colors::Background::Black,
+                    )
+                }
+            })
+            .collect::<String>()
+    }
+
+    fn transform_ascii(&self, chunk: &[u8]) -> String {
+        chunk
+            .iter()
+            .map(|&byte| {
+                if byte.is_ascii_graphic() || byte == b' ' {
+                    colors::apply_to_text(
+                        &format!("{}", byte as char),
+                        colors::Foreground::Green,
+                        colors::Background::Black,
+                    )
+                } else {
+                    colors::apply_to_text(".", colors::Foreground::Red, colors::Background::Black)
+                }
+            })
+            .collect::<String>()
     }
 }
