@@ -20,11 +20,17 @@ impl ByteGazer {
     pub fn display(self) {
         let bytes_per_line = 16;
 
-        for chunk in self.bytes.chunks(bytes_per_line) {
+        for (index, chunk) in self.bytes.chunks(bytes_per_line).enumerate() {
+            let offset = colors::apply_to_text(
+                format!("{:08x}", index * bytes_per_line).as_str(),
+                colors::Foreground::Yellow,
+                colors::Background::Black,
+            );
             let padding = "   ".repeat(bytes_per_line - chunk.len());
 
             println!(
-                "{}{} | {}",
+                "{}: {}{} | {}",
+                offset,
                 self.transform_hex(chunk),
                 padding,
                 self.transform_ascii(chunk)
