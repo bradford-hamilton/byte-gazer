@@ -18,7 +18,7 @@ impl ByteGazer {
     }
 
     pub fn display(self) {
-        let bytes_per_line = 16;
+        let bytes_per_line = 32;
 
         for (index, chunk) in self.bytes.chunks(bytes_per_line).enumerate() {
             let offset = colors::apply_to_text(

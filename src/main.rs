@@ -1,7 +1,7 @@
-use bg::ByteGazer;
+use bytegazer::ByteGazer;
 use std::{env, process};
 
-mod bg;
+mod bytegazer;
 mod colors;
 
 fn main() {
